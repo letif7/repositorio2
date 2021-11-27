@@ -1,5 +1,5 @@
 package py.una.bd;
-
+//leticia ferreira
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
