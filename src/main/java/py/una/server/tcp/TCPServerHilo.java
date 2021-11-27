@@ -1,7 +1,10 @@
 package py.una.server.tcp;
 
+import py.una.entidad.Persona;
+import py.una.entidad.PersonaJSON;
+
 import java.net.*;
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.io.*;
 
 public class TCPServerHilo extends Thread {
@@ -17,43 +20,35 @@ public class TCPServerHilo extends Thread {
     }
 
     public void run() {
-
+        System.out.println("funcion run");
         try {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(
-                    socket.getInputStream()));
+            BufferedReader in = new BufferedReader( new InputStreamReader(socket.getInputStream()));
             out.println("Bienvenido!");
-            String inputLine, outputLine;
+            String outputLine = null;
+            Persona inputLine = new Persona();
 
-            while ((inputLine = in.readLine()) != null) {
+            while ( inputLine != null ) {
                 System.out.println("Mensaje recibido: " + inputLine);
-                
+                inputLine = PersonaJSON.stringObjeto(in.readLine());
+                System.out.println("se recibio tipo de operacion: "+inputLine.getTipo_operacion()+" cedula: "+inputLine.getCedula()+" nombre: "+inputLine.getNombre());
+
                 //out.println(inputLine);
                 
                 //to-do: utilizar json
-                if (inputLine.equals("Bye")) {
-                    outputLine = "Usted apago el hilo";
-                    break;
-                    
-                }else if (inputLine.equals("Terminar todo")) {
+                if ( inputLine.getTipo_operacion() == 3 ) {
                     servidor.listening = false;
                     outputLine = "Usted apago todo";
                     break;
                     
-                }else if (inputLine.split(":").length > 1) {
-                	String usuario = inputLine.split(":")[1]; 
-                	servidor.usuarios.add(usuario);
-                	outputLine = "Usuario/a "+usuario+"agregado";
+                }else if ( inputLine.getTipo_operacion() == 1) {
+                    outputLine = "Lista de usuarios: " ;
+                    ArrayList<Persona> ax = new ArrayList<Persona>();
+                    outputLine= PersonaJSON.list_toJsonPersona(servidor.usuarios.listarDAO());
 
-                }else {
-                	outputLine = "Lista de usuarios: " ;
-                               	
-                	Iterator<String> iter = servidor.usuarios.iterator();
-                	
-                    while (iter.hasNext()) { 
-                    	outputLine = outputLine + " - " + iter.next(); 
-                    } 
+                }else if( inputLine.getTipo_operacion() ==  2) {
+                    servidor.usuarios.setVehiculo(inputLine);
+                    outputLine = "Usuario/a "+inputLine.getCedula()+" agregado";
                 }
                 
                 
@@ -65,6 +60,8 @@ public class TCPServerHilo extends Thread {
             System.out.println("Finalizando Hilo");
 
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

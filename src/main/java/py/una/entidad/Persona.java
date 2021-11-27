@@ -1,27 +1,28 @@
 package py.una.entidad;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Persona {
-
 	Long cedula;
 	String nombre;
 	String apellido;
-	
-	List<String> asignaturas;
-	
-	public Persona(){
-		asignaturas = new ArrayList<String>();
+	String chapa;
+	String marca;
+	Long tipo_operacion;
+
+	public Persona(Long cedula, String nombre, String apellido, String chapa,String marca, Long TipoOp){
+		this.cedula = cedula;
+		this.nombre = nombre;
+		this.apellido = apellido;
+		this.chapa = chapa;
+		this.marca = marca;
+		this.tipo_operacion=TipoOp;
+	}
+	public Persona() {
+
 	}
 
-	public Persona(Long pcedula, String pnombre, String papellido){
-		this.cedula = pcedula;
-		this.nombre = pnombre;
-		this.apellido = papellido;
-		
-		asignaturas = new ArrayList<String>();
-	}
-	
 	public Long getCedula() {
 		return cedula;
 	}
@@ -42,15 +43,32 @@ public class Persona {
 		return apellido;
 	}
 
-	public void setApellido(String apellido) {
-		this.apellido = apellido;
+	public void setApellido(String Apellido) {
+		this.apellido = Apellido;
 	}
 
-	public List<String> getAsignaturas() {
-		return asignaturas;
+	public String getChapa() {
+		return chapa;
 	}
 
-	public void setAsignaturas(List<String> asignaturas) {
-		this.asignaturas = asignaturas;
+	public void setChapa(String chapa) {
+		this.chapa = chapa;
 	}
+
+	public String getMarca() {
+		return marca;
+	}
+
+	public void setMarca(String marca) {
+		this.marca = marca;
+	}
+
+	public Long getTipo_operacion() {
+		return tipo_operacion;
+	}
+
+	public void setTipo_operacion(Long tipo_operacion) {
+		this.tipo_operacion = tipo_operacion;
+	}
+
 }
